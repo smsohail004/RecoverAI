@@ -10,7 +10,13 @@ RecoverAI is an AI-powered payment recovery decision platform designed to analyz
 
 
 
-The system uses machine learning, expected-value calculations, business rules, and safety guardrails to help maximize payment recovery while minimizing unnecessary intervention costs.
+The system uses machine learning, expected-value calculations, business rules, and safety guardrails to help maximize payment recovery while minimizing unnecessary intervention costs.  
+
+\## Dashboard Preview
+
+
+
+!\[RecoverAI Dashboard](screenshots/dashboard.png)
 
 
 
