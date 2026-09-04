@@ -6,6 +6,7 @@ import joblib
 import pandas as pd
 
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
@@ -104,6 +105,12 @@ app.mount(
     ),
     name="dashboard"
 )
+
+
+# Redirect the root URL to the RecoverAI dashboard
+@app.get("/")
+def root():
+    return RedirectResponse(url="/dashboard/")
 
 
 # ============================================================
