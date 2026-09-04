@@ -1,0 +1,6 @@
+timestamp,payment_id,amount,payment_method,failure_reason,attempt_number,customer_success_rate,recommended_action,recovery_probability,expected_recovery,expected_net_recovery,guardrail,reason
+2026-09-03T21:48:37.846903+00:00,pay_audit_test_001,4999.0,UPI,BANK_ERROR,1,0.91,RETRY,0.6646214668255449,3322.442712660899,3317.442712660899,,Selected action with highest expected net recovery.
+2026-09-03T21:55:13.427365+00:00,pay_demo_dashboard_001,4999.0,UPI,CARD_EXPIRED,1,0.91,SEND_REMINDER,0.6556448351815919,3277.5685310727777,3275.5685310727777,,Selected action with highest expected net recovery.
+2026-09-03T21:55:20.611995+00:00,pay_demo_dashboard_001,4999.0,UPI,INSUFFICIENT_FUNDS,1,0.91,SEND_REMINDER,0.6728876982464297,3363.765603533902,3361.765603533902,,Selected action with highest expected net recovery.
+2026-09-03T21:55:27.394325+00:00,pay_demo_dashboard_001,4999.0,UPI,TIMEOUT,1,0.91,RETRY,0.6838364629589561,3418.4984783318214,3413.4984783318214,,Selected action with highest expected net recovery.
+2026-09-03T21:55:34.644311+00:00,pay_demo_dashboard_001,4999.0,UPI,USER_CANCELLED,1,0.91,SEND_REMINDER,0.6747395170772564,3373.022845869205,3371.022845869205,,Selected action with highest expected net recovery.

@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>RecoverAI | Payment Recovery Intelligence</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/dashboard/style.css">
+</head>
+
+
+<body>
+
+    <!-- ============================================= -->
+    <!-- SIDEBAR -->
+    <!-- ============================================= -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                R
+            </div>
+
+            <div>
+                <h1>RecoverAI</h1>
+                <span>Payment Intelligence</span>
+            </div>
+
+        </div>
+
+
+        <nav>
+
+            <a href="#overview" class="active">
+                <span>▦</span>
+                Overview
+            </a>
+
+            <a href="#analyzer">
+                <span>◇</span>
+                Payment Analyzer
+            </a>
+
+            <a href="#analytics">
+                <span>↗</span>
+                Recovery Analytics
+            </a>
+
+            <a href="#actions">
+                <span>✓</span>
+                Interventions
+            </a>
+
+            <a href="#audit">
+    <span>▤</span>
+    Audit Trail
+</a>
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <div class="simulation-badge">
+
+                <span class="status-dot"></span>
+
+                Simulation Mode
+
+            </div>
+
+            <small>
+                RecoverAI v1.0
+            </small>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ============================================= -->
+    <!-- MAIN CONTENT -->
+    <!-- ============================================= -->
+
+    <main class="main" id="overview">
+
+
+        <!-- ============================================= -->
+        <!-- HEADER -->
+        <!-- ============================================= -->
+
+        <header class="topbar">
+
+            <div>
+
+                <p class="eyebrow">
+                    PAYMENT RECOVERY INTELLIGENCE
+                </p>
+
+                <h2>
+                    Recovery Command Center
+                </h2>
+
+                <p class="subtitle">
+                    AI-driven decisions for failed payments
+                </p>
+
+            </div>
+
+
+            <div class="system-status">
+
+                <span class="status-dot"></span>
+
+                AI Engine Online
+
+            </div>
+
+        </header>
+
+
+        <!-- ============================================= -->
+        <!-- METRICS -->
+        <!-- ============================================= -->
+
+        <section class="metrics">
+
+
+            <div class="metric-card">
+
+                <div class="metric-label">
+                    Revenue at Risk
+                </div>
+
+                <div class="metric-value" id="revenueRisk">
+                    ₹30.98L
+                </div>
+
+                <div class="metric-sub">
+                    1,252 failed payments
+                </div>
+
+            </div>
+
+
+            <div class="metric-card">
+
+                <div class="metric-label">
+                    Potentially Recoverable
+                </div>
+
+                <div class="metric-value" id="recoverable">
+                    ₹17.98L
+                </div>
+
+                <div class="metric-sub positive">
+                    Recovery opportunity
+                </div>
+
+            </div>
+
+
+            <div class="metric-card">
+
+                <div class="metric-label">
+                    Revenue Recovered
+                </div>
+
+                <div class="metric-value" id="priority">
+                    ₹15.04L
+                </div>
+
+                <div class="metric-sub positive">
+                    Historical simulated recovery
+                </div>
+
+            </div>
+
+
+            <div class="metric-card">
+
+                <div class="metric-label">
+                    Recovery Rate
+                </div>
+
+                <div class="metric-value" id="recoveryRate">
+                    46.96%
+                </div>
+
+                <div class="metric-sub positive">
+                    Historical recovery rate
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- ============================================= -->
+        <!-- PAYMENT ANALYZER -->
+        <!-- ============================================= -->
+
+        <section class="workspace" id="analyzer">
+
+
+            <!-- ANALYZER FORM -->
+
+            <div class="panel analyzer">
+
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <p class="eyebrow">
+                            DECISION ENGINE
+                        </p>
+
+                        <h3>
+                            Analyze Failed Payment
+                        </h3>
+
+                    </div>
+
+
+                    <span class="model-badge">
+                        Random Forest V2
+                    </span>
+
+                </div>
+
+
+                <div class="form-grid">
+
+
+                    <!-- PAYMENT ID -->
+
+                    <div class="field">
+
+                        <label for="paymentId">
+                            Payment ID
+                        </label>
+
+                        <input
+                            id="paymentId"
+                            type="text"
+                            value="pay_demo_dashboard_001"
+                        >
+
+                    </div>
+
+
+                    <!-- AMOUNT -->
+
+                    <div class="field">
+
+                        <label for="amount">
+                            Amount
+                        </label>
+
+                        <input
+                            id="amount"
+                            type="number"
+                            value="4999"
+                            min="1"
+                        >
+
+                    </div>
+
+
+                    <!-- PAYMENT METHOD -->
+
+                    <div class="field">
+
+                        <label for="paymentMethod">
+                            Payment Method
+                        </label>
+
+                        <select id="paymentMethod">
+
+                            <option value="UPI">
+                                UPI
+                            </option>
+
+                            <option value="CARD">
+                                CARD
+                            </option>
+
+                            <option value="WALLET">
+                                WALLET
+                            </option>
+
+                            <option value="NETBANKING">
+                                NETBANKING
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- FAILURE REASON -->
+
+                    <div class="field">
+
+                        <label for="failureReason">
+                            Failure Reason
+                        </label>
+
+                        <select id="failureReason">
+
+                            <option value="BANK_ERROR">
+                                BANK_ERROR
+                            </option>
+
+                            <option value="CARD_EXPIRED">
+                                CARD_EXPIRED
+                            </option>
+
+                            <option value="FRAUD_SUSPECTED">
+                                FRAUD_SUSPECTED
+                            </option>
+
+                            <option value="INSUFFICIENT_FUNDS">
+                                INSUFFICIENT_FUNDS
+                            </option>
+
+                            <option value="LIMIT_EXCEEDED">
+                                LIMIT_EXCEEDED
+                            </option>
+
+                            <option value="NETWORK_ERROR">
+                                NETWORK_ERROR
+                            </option>
+
+                            <option value="TIMEOUT">
+                                TIMEOUT
+                            </option>
+
+                            <option value="USER_CANCELLED">
+                                USER_CANCELLED
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- ATTEMPT NUMBER -->
+
+                    <div class="field">
+
+                        <label for="attemptNumber">
+                            Attempt Number
+                        </label>
+
+                        <input
+                            id="attemptNumber"
+                            type="number"
+                            value="1"
+                            min="1"
+                        >
+
+                    </div>
+
+
+                    <!-- SUCCESS RATE -->
+
+                    <div class="field">
+
+                        <label for="successRate">
+                            Customer Success Rate
+                        </label>
+
+                        <div class="percentage-input">
+
+                            <input
+                                id="successRate"
+                                type="number"
+                                value="91"
+                                min="0"
+                                max="100"
+                            >
+
+                            <span>%</span>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- ANALYZE BUTTON -->
+
+                <button
+                    type="button"
+                    class="analyze-button"
+                    onclick="analyzePayment()"
+                >
+
+                    <span>
+                        Analyze Payment
+                    </span>
+
+                    <span>
+                        →
+                    </span>
+
+                </button>
+
+
+            </div>
+
+
+            <!-- ============================================= -->
+            <!-- AI DECISION -->
+            <!-- ============================================= -->
+
+            <div class="panel decision-panel">
+
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <p class="eyebrow">
+                            AI DECISION
+                        </p>
+
+                        <h3>
+                            Recovery Recommendation
+                        </h3>
+
+                    </div>
+
+
+                    <div
+                        class="decision-status"
+                        id="decisionStatus"
+                    >
+                        DECISION
+                    </div>
+
+                </div>
+
+
+                <div class="decision-main">
+
+
+                    <div>
+
+                        <div class="probability-label">
+                            Recovery Probability
+                        </div>
+
+                        <div
+                            class="probability"
+                            id="probability"
+                        >
+                            66.46%
+                        </div>
+
+                    </div>
+
+
+                    <div class="action-box">
+
+                        <span>
+                            RECOMMENDED ACTION
+                        </span>
+
+                        <strong id="recommendedAction">
+                            RETRY
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- RECOVERY VALUES -->
+
+                <div class="recovery-value">
+
+
+                    <div>
+
+                        <span>
+                            Expected Recovery
+                        </span>
+
+                        <strong id="expectedRecovery">
+                            ₹3,322.44
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Expected Net Recovery
+                        </span>
+
+                        <strong id="expectedNet">
+                            ₹3,317.44
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- REASON -->
+
+                <div class="reason-box">
+
+                    <span>
+                        DECISION REASON
+                    </span>
+
+                    <p id="reason">
+                        Selected action with highest expected net recovery.
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+        <!-- ============================================= -->
+        <!-- ACTION COMPARISON -->
+        <!-- ============================================= -->
+
+        <section class="panel" id="actions">
+
+
+            <div class="panel-header">
+
+                <div>
+
+                    <p class="eyebrow">
+                        EXPECTED VALUE
+                    </p>
+
+                    <h3>
+                        Action Comparison
+                    </h3>
+
+                </div>
+
+
+                <span class="muted">
+                    AI evaluates each intervention
+                </span>
+
+            </div>
+
+
+            <div class="actions">
+
+
+                <!-- RETRY -->
+
+                <div class="action-card">
+
+                    <div class="action-title">
+
+                        <span>
+                            RETRY
+                        </span>
+
+                        <span id="retryProbability">
+                            66.46%
+                        </span>
+
+                    </div>
+
+
+                    <div class="bar">
+
+                        <div
+                            class="bar-fill"
+                            id="retryBar"
+                            style="width: 66.46%;"
+                        ></div>
+
+                    </div>
+
+
+                    <div class="action-bottom">
+
+                        <span>
+                            Expected Net
+                        </span>
+
+                        <strong id="retryNet">
+                            ₹3,317.44
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SEND REMINDER -->
+
+                <div class="action-card">
+
+                    <div class="action-title">
+
+                        <span>
+                            SEND REMINDER
+                        </span>
+
+                        <span id="reminderProbability">
+                            56.99%
+                        </span>
+
+                    </div>
+
+
+                    <div class="bar">
+
+                        <div
+                            class="bar-fill"
+                            id="reminderBar"
+                            style="width: 56.99%;"
+                        ></div>
+
+                    </div>
+
+
+                    <div class="action-bottom">
+
+                        <span>
+                            Expected Net
+                        </span>
+
+                        <strong id="reminderNet">
+                            ₹2,847.10
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+        <!-- ============================================= -->
+        <!-- RECOVERY ANALYTICS -->
+        <!-- ============================================= -->
+
+        <section class="panel analytics-panel" id="analytics">
+
+
+            <div class="panel-header">
+
+                <div>
+
+                    <p class="eyebrow">
+                        RECOVERY INTELLIGENCE
+                    </p>
+
+                    <h3>
+                        Recovery Analytics
+                    </h3>
+
+                </div>
+
+
+                <span class="muted">
+                    Historical intervention performance
+                </span>
+
+            </div>
+
+
+            <!-- ANALYTICS SUMMARY -->
+
+            <div class="analytics-summary">
+
+
+                <div class="analytics-stat">
+
+                    <span>
+                        Overall Recovery
+                    </span>
+
+                    <strong id="overallRecovery">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="analytics-stat">
+
+                    <span>
+                        Total Interventions
+                    </span>
+
+                    <strong id="totalInterventions">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="analytics-stat">
+
+                    <span>
+                        Successful Recoveries
+                    </span>
+
+                    <strong id="totalSuccesses">
+                        —
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- ACTION PERFORMANCE -->
+
+            <div class="analytics-section">
+
+                <div class="analytics-section-title">
+                    Action Performance
+                </div>
+
+                <div id="actionAnalytics">
+
+                    Loading analytics...
+
+                </div>
+
+            </div>
+
+
+            <!-- FAILURE PERFORMANCE -->
+
+            <div class="analytics-section">
+
+                <div class="analytics-section-title">
+                    Recovery by Failure Reason
+                </div>
+
+                <div id="failureAnalytics">
+
+                    Loading analytics...
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- ============================================= -->
+        <!-- BOTTOM SECTION -->
+        <!-- ============================================= -->
+
+        <section class="bottom-grid" id="guardrails">
+
+<!-- ================================================= -->
+<!-- AUDIT TRAIL -->
+<!-- ================================================= -->
+
+<section id="audit" class="audit-section">
+
+    <div class="section-header">
+
+        <div>
+
+            <p class="eyebrow">
+                DECISION HISTORY
+            </p>
+
+            <h2>
+                Audit Trail
+            </h2>
+
+            <p class="section-subtitle">
+                Complete history of AI payment recovery decisions
+            </p>
+
+        </div>
+
+
+        <button
+            id="refreshAuditBtn"
+            class="audit-refresh-btn"
+            type="button"
+        >
+            ↻ Refresh
+        </button>
+
+    </div>
+
+
+    <div class="audit-card">
+
+        <div class="audit-card-header">
+
+            <div>
+
+                <h3>
+                    Recovery Decision Records
+                </h3>
+
+                <p id="auditRecordCount">
+                    Loading records...
+                </p>
+
+            </div>
+
+
+            <div class="audit-status">
+
+                <span class="status-dot"></span>
+
+                Simulation Mode
+
+            </div>
+
+        </div>
+
+
+        <div class="audit-table-wrapper">
+
+            <table class="audit-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Timestamp
+                        </th>
+
+                        <th>
+                            Payment ID
+                        </th>
+
+                        <th>
+                            Amount
+                        </th>
+
+                        <th>
+                            Failure Reason
+                        </th>
+
+                        <th>
+                            Recommended Action
+                        </th>
+
+                        <th>
+                            Recovery Probability
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="auditTableBody">
+
+                    <tr>
+
+                        <td
+                            colspan="6"
+                            class="audit-loading"
+                        >
+                            Loading audit records...
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <div
+            id="auditEmptyState"
+            class="audit-empty-state"
+            style="display: none;"
+        >
+
+            <div class="audit-empty-icon">
+                ▤
+            </div>
+
+            <h3>
+                No Audit Records Yet
+            </h3>
+
+            <p>
+                Analyze a failed payment to create your first AI decision record.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+            <!-- GUARDRAILS -->
+
+            <div class="panel">
+
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <p class="eyebrow">
+                            SAFETY
+                        </p>
+
+                        <h3>
+                            Guardrails
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <div class="guardrail-list">
+
+
+                    <div class="guardrail">
+
+                        <div class="check">
+                            ✓
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Fraud Protection
+                            </strong>
+
+                            <small>
+                                Fraud payments escalate automatically
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="guardrail">
+
+                        <div class="check">
+                            ✓
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Retry Limit
+                            </strong>
+
+                            <small>
+                                Maximum 3 recovery attempts
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="guardrail">
+
+                        <div class="check">
+                            ✓
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Expected Value
+                            </strong>
+
+                            <small>
+                                Negative-value actions blocked
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+            <!-- MODEL PERFORMANCE -->
+
+            <div class="panel">
+
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <p class="eyebrow">
+                            MODEL
+                        </p>
+
+                        <h3>
+                            AI Performance
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <div class="model-stats">
+
+
+                    <div>
+
+                        <span>
+                            Accuracy
+                        </span>
+
+                        <strong id="modelAccuracy">
+                            71.06%
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            ROC-AUC
+                        </span>
+
+                        <strong id="rocAuc">
+                            0.7492
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Best Action Accuracy
+                        </span>
+
+                        <strong id="bestActionAccuracy">
+                            71.50%
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+        <!-- ============================================= -->
+        <!-- FOOTER -->
+        <!-- ============================================= -->
+
+        <footer>
+
+            RecoverAI · AI-assisted payment recovery ·
+            All actions simulated
+
+        </footer>
+
+
+    </main>
+
+
+    <!-- ============================================= -->
+    <!-- JAVASCRIPT -->
+    <!-- ============================================= -->
+
+    <script src="/dashboard/app.js"></script>
+
+</body>
+</html>

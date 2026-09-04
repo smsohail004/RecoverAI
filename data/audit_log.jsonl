@@ -1,0 +1,14 @@
+{"timestamp": "2026-08-29T18:28:41.413871", "payment_id": "pay_test_001", "action": "RETRY", "amount": 4999.0, "result": "SUCCESS", "environment": "SIMULATION"}
+{"timestamp": "2026-08-29T18:28:41.414846", "payment_id": "pay_test_002", "action": "SEND_REMINDER", "amount": 2499.0, "result": "SCHEDULED", "environment": "SIMULATION"}
+{"timestamp": "2026-08-29T18:28:41.415650", "payment_id": "pay_test_003", "action": "ESCALATE", "reason": "High risk payment", "result": "REVIEW_REQUIRED", "environment": "SIMULATION"}
+{"timestamp": "2026-08-29T18:28:41.416563", "payment_id": "pay_test_004", "action": "DO_NOT_ACT", "reason": "Low recovery probability", "result": "NO_ACTION", "environment": "SIMULATION"}
+{"timestamp": "2026-08-29T18:28:53.985119", "payment_id": "pay_test_001", "action": "RETRY", "amount": 4999.0, "result": "FAILED", "environment": "SIMULATION"}
+{"timestamp": "2026-08-29T18:28:53.985823", "payment_id": "pay_test_002", "action": "SEND_REMINDER", "amount": 2499.0, "result": "SCHEDULED", "environment": "SIMULATION"}
+{"timestamp": "2026-08-29T18:28:53.986530", "payment_id": "pay_test_003", "action": "ESCALATE", "reason": "High risk payment", "result": "REVIEW_REQUIRED", "environment": "SIMULATION"}
+{"timestamp": "2026-08-29T18:28:53.987088", "payment_id": "pay_test_004", "action": "DO_NOT_ACT", "reason": "Low recovery probability", "result": "NO_ACTION", "environment": "SIMULATION"}
+{"timestamp": "2026-08-29T18:30:45.337396", "payment_id": "pay_test_001", "action": "RETRY", "amount": 4999.0, "result": "SUCCESS", "environment": "SIMULATION"}
+{"timestamp": "2026-08-29T18:30:45.338171", "payment_id": "pay_test_002", "action": "SEND_REMINDER", "amount": 2499.0, "result": "SCHEDULED", "environment": "SIMULATION"}
+{"timestamp": "2026-08-29T18:30:45.338907", "payment_id": "pay_test_003", "action": "ESCALATE", "reason": "High risk payment", "result": "REVIEW_REQUIRED", "environment": "SIMULATION"}
+{"timestamp": "2026-08-29T18:30:45.339804", "payment_id": "pay_test_004", "action": "DO_NOT_ACT", "reason": "Low recovery probability", "result": "NO_ACTION", "environment": "SIMULATION"}
+{"timestamp": "2026-08-29T18:36:18.432470", "payment_id": "pay_demo_001", "action": "RETRY", "amount": 4999.0, "result": "SUCCESS", "environment": "SIMULATION"}
+{"timestamp": "2026-08-29T18:42:07.561918", "payment_id": "pay_demo_002", "action": "SEND_REMINDER", "amount": 7500.0, "result": "SCHEDULED", "environment": "SIMULATION"}
