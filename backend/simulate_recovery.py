@@ -1,302 +1,472 @@
-import numpy as np
+import os
+import sys
+import random
+from datetime import datetime
+
+import joblib
 import pandas as pd
 
 
-# -----------------------------------------
-# Configuration
-# -----------------------------------------
+# ============================================================
+# PATH CONFIGURATION
+# ============================================================
 
-INPUT_PATH = "data/payments.csv"
-OUTPUT_PATH = "data/payments_with_recovery.csv"
+BASE_DIR = os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__))
+)
+
+INPUT_PATH = os.path.join(
+    BASE_DIR,
+    "data",
+    "payments.csv"
+)
+
+OUTPUT_PATH = os.path.join(
+    BASE_DIR,
+    "data",
+    "batch_recovery_results.csv"
+)
+
+MODEL_PATH = os.path.join(
+    BASE_DIR,
+    "models",
+    "recovery_model.joblib"
+)
+
+
+# ============================================================
+# CONFIGURATION
+# ============================================================
 
 RANDOM_SEED = 42
 
-np.random.seed(RANDOM_SEED)
+MAX_RECOVERY_ATTEMPTS = 3
+
+HIGH_CONFIDENCE_THRESHOLD = 0.75
+
+MODERATE_CONFIDENCE_THRESHOLD = 0.50
 
 
-# -----------------------------------------
-# Load existing payment dataset
-# -----------------------------------------
+random.seed(RANDOM_SEED)
+
+
+# ============================================================
+# LOAD DATA AND MODEL
+# ============================================================
+
+print()
+print("=" * 70)
+print("          RECOVERAI BATCH REVENUE RECOVERY SIMULATOR")
+print("=" * 70)
+print()
 
 df = pd.read_csv(INPUT_PATH)
 
+model = joblib.load(MODEL_PATH)
 
-# -----------------------------------------
-# Recovery probability function
-# -----------------------------------------
 
-def calculate_recovery_probability(row):
+# ============================================================
+# SIMULATE RECOVERY OUTCOME
+# ============================================================
+
+def simulate_recovery(probability):
     """
-    Estimate the probability that a recovery
-    attempt will succeed.
+    Simulate whether a recommended recovery
+    workflow successfully recovers the payment.
 
-    This is our synthetic ground-truth
-    generation logic.
-
-    Later, the ML model will try to learn
-    these relationships from historical data.
+    SIMULATION ONLY.
+    No real payment is processed.
     """
 
-    # Start with a neutral probability
-    probability = 0.50
+    return random.random() < probability
+
+
+# ============================================================
+# DECISION ENGINE
+# ============================================================
+
+def decide_recovery_action(row, probability):
+    """
+    Determine the safest bounded recovery action.
+    """
 
     failure_reason = row["failure_reason"]
-
-    customer_success_rate = row["customer_success_rate"]
-
     attempt_number = row["attempt_number"]
 
-    payment_method = row["payment_method"]
+    # --------------------------------------------------------
+    # STOPPING RULE 1: Fraud
+    # --------------------------------------------------------
 
-    amount = row["amount"]
+    if failure_reason == "FRAUD_SUSPECTED":
 
+        return (
+            "ESCALATE",
+            "Fraud-related payment requires human review.",
+            True
+        )
 
-    # -----------------------------------------
-    # Failure reason effect
-    # -----------------------------------------
+    # --------------------------------------------------------
+    # STOPPING RULE 2: Maximum attempts
+    # --------------------------------------------------------
 
-    reason_effects = {
-        "BANK_ERROR": 0.25,
-        "NETWORK_ERROR": 0.22,
-        "TIMEOUT": 0.18,
-        "USER_CANCELLED": 0.10,
-        "INSUFFICIENT_FUNDS": -0.05,
-        "LIMIT_EXCEEDED": -0.12,
-        "CARD_EXPIRED": -0.20,
-        "FRAUD_SUSPECTED": -0.45,
-    }
+    if attempt_number >= MAX_RECOVERY_ATTEMPTS:
 
-    probability += reason_effects.get(
-        failure_reason,
-        0
+        return (
+            "ESCALATE",
+            "Maximum automated recovery attempts reached.",
+            True
+        )
+
+    # --------------------------------------------------------
+    # HIGH CONFIDENCE
+    # --------------------------------------------------------
+
+    if probability >= HIGH_CONFIDENCE_THRESHOLD:
+
+        return (
+            "RETRY",
+            "High predicted recovery probability.",
+            False
+        )
+
+    # --------------------------------------------------------
+    # MODERATE CONFIDENCE
+    # --------------------------------------------------------
+
+    if probability >= MODERATE_CONFIDENCE_THRESHOLD:
+
+        return (
+            "SEND_REMINDER",
+            "Moderate recovery probability. Reminder preferred.",
+            False
+        )
+
+    # --------------------------------------------------------
+    # LOW CONFIDENCE STOPPING RULE
+    # --------------------------------------------------------
+
+    return (
+        "DO_NOT_ACT",
+        "Low predicted recovery probability. Intervention stopped.",
+        True
     )
 
 
-    # -----------------------------------------
-    # Customer history effect
-    # -----------------------------------------
+# ============================================================
+# PROCESS FAILED PAYMENTS
+# ============================================================
 
-    # A customer with a strong payment history
-    # is generally more likely to recover.
-
-    probability += (
-        customer_success_rate - 0.70
-    ) * 0.60
+failed_df = df[
+    df["status"] == "FAILED"
+].copy()
 
 
-    # -----------------------------------------
-    # Attempt number effect
-    # -----------------------------------------
-
-    # Repeated failures reduce the chance
-    # that another attempt will work.
-
-    probability -= (
-        attempt_number - 1
-    ) * 0.08
+results = []
 
 
-    # -----------------------------------------
-    # Payment method effect
-    # -----------------------------------------
+for _, payment in failed_df.iterrows():
 
-    method_effects = {
-        "UPI": 0.04,
-        "CARD": 0.00,
-        "NETBANKING": -0.02,
-        "WALLET": 0.02,
-    }
+    # --------------------------------------------------------
+    # Prepare features for ML model
+    # --------------------------------------------------------
 
-    probability += method_effects.get(
-        payment_method,
-        0
+    payment_features = pd.DataFrame([
+        {
+            "amount": payment["amount"],
+            "payment_method": payment["payment_method"],
+            "failure_reason": payment["failure_reason"],
+            "attempt_number": payment["attempt_number"],
+            "customer_success_rate":
+                payment["customer_success_rate"],
+        }
+    ])
+
+    # --------------------------------------------------------
+    # Predict recovery probability
+    # --------------------------------------------------------
+
+    probability = model.predict_proba(
+        payment_features
+    )[0][1]
+
+
+    # --------------------------------------------------------
+    # Expected recovery value
+    # --------------------------------------------------------
+
+    expected_recovery = (
+        payment["amount"] * probability
     )
 
 
-    # -----------------------------------------
-    # Transaction amount effect
-    # -----------------------------------------
+    # --------------------------------------------------------
+    # Decide bounded recovery action
+    # --------------------------------------------------------
 
-    # Very large transactions are slightly
-    # harder to recover automatically.
-
-    if amount > 50000:
-        probability -= 0.05
-
-    elif amount > 25000:
-        probability -= 0.02
-
-
-    # -----------------------------------------
-    # Keep probability in valid range
-    # -----------------------------------------
-
-    probability = np.clip(
-        probability,
-        0.02,
-        0.97
+    action, reason, stopped = decide_recovery_action(
+        payment,
+        probability
     )
 
-    return probability
+
+    # --------------------------------------------------------
+    # Execute simulated recovery
+    # --------------------------------------------------------
+
+    recovery_attempted = False
+
+    recovery_success = False
+
+    recovered_amount = 0.0
 
 
-# -----------------------------------------
-# Calculate recovery probability
-# -----------------------------------------
+    if action in ["RETRY", "SEND_REMINDER"]:
 
-df["true_recovery_probability"] = np.nan
+        recovery_attempted = True
 
-failed_mask = df["status"] == "FAILED"
+        recovery_success = simulate_recovery(
+            probability
+        )
 
-df.loc[
-    failed_mask,
-    "true_recovery_probability"
-] = df.loc[
-    failed_mask
-].apply(
-    calculate_recovery_probability,
-    axis=1
-)
+        if recovery_success:
+
+            recovered_amount = payment["amount"]
 
 
-# -----------------------------------------
-# Simulate recovery attempts
-# -----------------------------------------
+    # --------------------------------------------------------
+    # Store audit-style result
+    # --------------------------------------------------------
 
-df["recovery_attempted"] = False
+    results.append(
+        {
+            "timestamp": datetime.now().isoformat(),
 
-df["recovery_success"] = np.nan
+            "payment_id": payment["payment_id"],
+
+            "amount": payment["amount"],
+
+            "payment_method":
+                payment["payment_method"],
+
+            "failure_reason":
+                payment["failure_reason"],
+
+            "attempt_number":
+                payment["attempt_number"],
+
+            "customer_success_rate":
+                payment["customer_success_rate"],
+
+            "predicted_probability":
+                probability,
+
+            "expected_recovery":
+                expected_recovery,
+
+            "recommended_action":
+                action,
+
+            "decision_reason":
+                reason,
+
+            "workflow_stopped":
+                stopped,
+
+            "recovery_attempted":
+                recovery_attempted,
+
+            "recovery_success":
+                recovery_success,
+
+            "recovered_amount":
+                recovered_amount,
+
+            "environment":
+                "SIMULATION",
+        }
+    )
 
 
-# For our historical simulation, every failed
-# payment receives a simulated recovery attempt.
-#
-# IMPORTANT:
-# This is synthetic experimentation only.
-# It does NOT represent a recommendation to
-# automatically retry real payments.
+# ============================================================
+# CREATE RESULTS DATASET
+# ============================================================
 
-df.loc[
-    failed_mask,
-    "recovery_attempted"
-] = True
+results_df = pd.DataFrame(results)
 
-
-# -----------------------------------------
-# Generate recovery outcomes
-# -----------------------------------------
-
-random_values = np.random.random(
-    failed_mask.sum()
-)
-
-recovery_probabilities = df.loc[
-    failed_mask,
-    "true_recovery_probability"
-].values
-
-
-recovery_results = (
-    random_values < recovery_probabilities
-)
-
-
-df.loc[
-    failed_mask,
-    "recovery_success"
-] = recovery_results.astype(int)
-
-
-# -----------------------------------------
-# Save enriched dataset
-# -----------------------------------------
-
-df.to_csv(
+results_df.to_csv(
     OUTPUT_PATH,
     index=False
 )
 
 
-# -----------------------------------------
-# Display results
-# -----------------------------------------
+# ============================================================
+# BATCH METRICS
+# ============================================================
 
-failed_df = df[
-    df["recovery_attempted"] == True
-]
+total_failed_payments = len(results_df)
+
+total_revenue_at_risk = (
+    results_df["amount"].sum()
+)
+
+recovery_attempts = (
+    results_df["recovery_attempted"] == True
+).sum()
 
 successful_recoveries = (
-    failed_df["recovery_success"] == 1
+    results_df["recovery_success"] == True
 ).sum()
 
-failed_recoveries = (
-    failed_df["recovery_success"] == 0
+stopped_workflows = (
+    results_df["workflow_stopped"] == True
 ).sum()
 
-recovered_revenue = failed_df.loc[
-    failed_df["recovery_success"] == 1,
-    "amount"
-].sum()
+money_recovered = (
+    results_df["recovered_amount"].sum()
+)
 
-attempted_revenue = failed_df["amount"].sum()
 
-recovery_rate = (
-    successful_recoveries /
-    len(failed_df)
-) * 100
+if recovery_attempts > 0:
 
+    recovery_success_rate = (
+        successful_recoveries
+        / recovery_attempts
+    ) * 100
+
+else:
+
+    recovery_success_rate = 0
+
+
+if total_revenue_at_risk > 0:
+
+    revenue_recovery_rate = (
+        money_recovered
+        / total_revenue_at_risk
+    ) * 100
+
+else:
+
+    revenue_recovery_rate = 0
+
+
+# ============================================================
+# ACTION BREAKDOWN
+# ============================================================
+
+action_counts = (
+    results_df[
+        "recommended_action"
+    ]
+    .value_counts()
+)
+
+
+# ============================================================
+# DISPLAY RESULTS
+# ============================================================
 
 print()
-print("=" * 65)
-print("       RECOVERAI RECOVERY OUTCOME SIMULATOR")
-print("=" * 65)
 
-print()
+print("BATCH RECOVERY RESULTS")
+print("-" * 70)
 
 print(
-    f"Failed payments available : "
-    f"{len(failed_df):,}"
+    f"Failed payments analyzed       : "
+    f"{total_failed_payments:,}"
 )
 
 print(
-    f"Recovery attempts         : "
-    f"{len(failed_df):,}"
+    f"Total revenue at risk          : "
+    f"Rs. {total_revenue_at_risk:,.2f}"
 )
 
 print(
-    f"Successful recoveries     : "
+    f"Recovery workflows executed    : "
+    f"{recovery_attempts:,}"
+)
+
+print(
+    f"Successful recoveries          : "
     f"{successful_recoveries:,}"
 )
 
 print(
-    f"Unsuccessful recoveries   : "
-    f"{failed_recoveries:,}"
+    f"Workflows safely stopped       : "
+    f"{stopped_workflows:,}"
 )
 
 print()
 
 print(
-    f"Simulated recovery rate   : "
-    f"{recovery_rate:.2f}%"
+    f"Money recovered (simulation)   : "
+    f"Rs. {money_recovered:,.2f}"
 )
 
 print(
-    f"Revenue attempted         : "
-    f"₹{attempted_revenue:,.2f}"
+    f"Recovery success rate          : "
+    f"{recovery_success_rate:.2f}%"
 )
 
 print(
-    f"Simulated revenue recovered: "
-    f"₹{recovered_revenue:,.2f}"
+    f"Revenue recovery rate          : "
+    f"{revenue_recovery_rate:.2f}%"
 )
 
 print()
 
-print(
-    f"Dataset saved to: "
-    f"{OUTPUT_PATH}"
-)
+print("ACTION BREAKDOWN")
+print("-" * 70)
+
+for action, count in action_counts.items():
+
+    print(
+        f"{action:<20} : {count:,}"
+    )
+
 
 print()
 
-print("=" * 65)
+print("STOPPING RULES")
+print("-" * 70)
+
+print(
+    f"Maximum automated attempts     : "
+    f"{MAX_RECOVERY_ATTEMPTS}"
+)
+
+print(
+    "Fraud suspected payments       : "
+    "ESCALATE"
+)
+
+print(
+    "Low confidence payments        : "
+    "DO_NOT_ACT"
+)
+
+
+print()
+
+print("OUTPUT")
+print("-" * 70)
+
+print(
+    f"Batch results saved to:"
+)
+
+print(
+    OUTPUT_PATH
+)
+
+
+print()
+print("=" * 70)
+
+print(
+    "SIMULATION COMPLETE — "
+    "NO REAL PAYMENTS WERE PROCESSED"
+)
+
+print("=" * 70)
+print()
