@@ -29,3 +29,5 @@ dist/
 
 # Local command history
 command_history.txt
+
+data/batch_recovery_results.csv
